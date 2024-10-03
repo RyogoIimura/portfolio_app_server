@@ -11,7 +11,6 @@ app.use(express.json());
 app.use(cors());
 const prisma = new PrismaClient();
 
-// 全て取得
 app.get("/allItems", async (req: Request, res: Response) => {
   const allItems = await prisma.items.findMany();
   const new_data = JSON.stringify(allItems, (key, value) => {
@@ -20,7 +19,6 @@ app.get("/allItems", async (req: Request, res: Response) => {
   return res.json(JSON.parse(new_data));
 });
 
-// 作成
 app.post("/createItem", async (req: Request, res: Response) => {
   try {
     const { name, category, price, capacity, maximum_temperature } = req.body;
@@ -33,13 +31,16 @@ app.post("/createItem", async (req: Request, res: Response) => {
         maximum_temperature,
       },
     });
-    return res.json(createItem);
+    // BigInt を string に変換してレスポンスを返す
+    const createItemStringified = JSON.stringify(createItem, (key, value) => {
+      return typeof value === "bigint" ? value.toString() : value;
+    });
+    return res.json(createItemStringified);  // 成功時のレスポンス
   } catch (e) {
-    return res.status(400).json(e);
+    console.error(e);  // エラー内容をログに出力
   }
 });
 
-// 編集
 app.put("/editItem/:id", async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
@@ -49,7 +50,7 @@ app.put("/editItem/:id", async (req: Request, res: Response) => {
       where: { id },
       data: {
         name,
-        category: parseInt(category),  // 必要なら型変換
+        category: parseInt(category), // 必要なら型変換
         price,
         capacity,
         maximum_temperature,
@@ -62,46 +63,22 @@ app.put("/editItem/:id", async (req: Request, res: Response) => {
     return res.json(editedItemStringified);  // 成功時のレスポンス
   } catch (e) {
     console.error(e);  // エラー内容をログに出力
-
-    // // Prisma エラーの詳細を適切に返す
-    // return res.status(400).json({
-    //   error: "Failed to update item",
-    //   message: e.message,  // エラーメッセージ
-    //   details: e,  // エラーの詳細
-    // });
   }
 });
-// app.put("/editItem/:id", async (req: Request, res: Response) => {
-//   try {
-//     const id = req.params.id;
-//     const { name, category, price, capacity, maximum_temperature } = req.body;
-//     const editItem = await prisma.items.update({
-//       where: { id },
-//       data: {
-//         name,
-//         category: parseInt(category),
-//         price,
-//         capacity,
-//         maximum_temperature,
-//       },
-//     });
-//     console.log(res);
-//     return res.json(editItem);
-//   } catch (e) {
-//     return res.status(400).json(e);
-//   }
-// });
 
-// Todo を削除
 app.delete("/deleteItem/:id", async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const deleteItem = await prisma.items.delete({
       where: { id },
     });
-    return res.json(deleteItem);
+    // BigInt を string に変換してレスポンスを返す
+    const deleteItemStringified = JSON.stringify(deleteItem, (key, value) => {
+      return typeof value === "bigint" ? value.toString() : value;
+    });
+    return res.json(deleteItemStringified);  // 成功時のレスポンス
   } catch (e) {
-    return res.status(400).json(e);
+    console.error(e);  // エラー内容をログに出力
   }
 });
 
