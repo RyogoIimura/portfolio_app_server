@@ -25,7 +25,7 @@ app.post("/createItem", async (req: Request, res: Response) => {
     const createItem = await prisma.items.create({
       data: {
         name,
-        category: category.toString(),
+        category,
         price,
         capacity,
         maximum_temperature,
@@ -50,7 +50,7 @@ app.put("/editItem/:id", async (req: Request, res: Response) => {
       where: { id },
       data: {
         name,
-        category: parseInt(category), // 必要なら型変換
+        category,
         price,
         capacity,
         maximum_temperature,
