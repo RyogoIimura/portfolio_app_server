@@ -11,6 +11,27 @@ app.use(express.json());
 app.use(cors());
 const prisma = new PrismaClient();
 
+// users
+app.get("/allUsers", async (req: Request, res: Response) => {
+  const allUsers = await prisma.users.findMany();
+  return res.json(allUsers);
+});
+app.post("/createUser", async (req: Request, res: Response) => {
+  try {
+    const { name, email } = req.body;
+    const createItem = await prisma.users.create({
+      data: {
+        name,
+        email
+      },
+    });
+    return res.json(createItem);  // 成功時のレスポンス
+  } catch (e) {
+    console.error(e);  // エラー内容をログに出力
+  }
+});
+
+// items
 app.get("/allItems", async (req: Request, res: Response) => {
   const allItems = await prisma.items.findMany();
   const new_data = JSON.stringify(allItems, (key, value) => {
@@ -18,7 +39,6 @@ app.get("/allItems", async (req: Request, res: Response) => {
   });
   return res.json(JSON.parse(new_data));
 });
-
 app.post("/createItem", async (req: Request, res: Response) => {
   try {
     const { name, category, price, capacity, maximum_temperature } = req.body;
@@ -40,7 +60,6 @@ app.post("/createItem", async (req: Request, res: Response) => {
     console.error(e);  // エラー内容をログに出力
   }
 });
-
 app.put("/editItem/:id", async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
@@ -65,7 +84,6 @@ app.put("/editItem/:id", async (req: Request, res: Response) => {
     console.error(e);  // エラー内容をログに出力
   }
 });
-
 app.delete("/deleteItem/:id", async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
@@ -81,5 +99,7 @@ app.delete("/deleteItem/:id", async (req: Request, res: Response) => {
     console.error(e);  // エラー内容をログに出力
   }
 });
+
+// reservations
 
 app.listen(PORT, () => console.log("server is running🚀"));
