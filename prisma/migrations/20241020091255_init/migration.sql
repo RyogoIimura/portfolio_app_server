@@ -4,8 +4,11 @@ CREATE TABLE "users" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "tel" TEXT,
-    "address" TEXT,
-    "birth" TEXT,
+    "post" TEXT,
+    "prefecture" TEXT,
+    "city" TEXT,
+    "address1" TEXT,
+    "address2" TEXT,
     "created_at" DATETIME NOT NULL,
     "updated_at" DATETIME NOT NULL
 );

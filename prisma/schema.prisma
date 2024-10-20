@@ -18,8 +18,11 @@ model users {
   name        String
   email       String
   tel         String?
-  address     String?
-  birth       String?
+  post        String?
+  prefecture  String?
+  city        String?
+  address1    String?
+  address2    String?
   created_at  DateTime @updatedAt
   updated_at  DateTime @updatedAt
 

@@ -38,16 +38,22 @@ app.post("/createUser", async (req: Request, res: Response) => {
 app.put("/editUser/:id", async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const { name, email, tel, address, birth } = req.body;
+    const { name, email, tel, post, prefecture, city, address1, address2, created_at, updated_at } = req.body;
 
     const editUser = await prisma.users.update({
       where: { id },
       data: {
+        id,
         name,
         email,
         tel,
-        address,
-        birth
+        post,
+        prefecture,
+        city,
+        address1,
+        address2,
+        created_at,
+        updated_at
       },
     });
     return res.json(editUser);  // 成功時のレスポンス
