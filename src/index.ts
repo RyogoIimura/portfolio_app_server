@@ -20,16 +20,6 @@ app.get("/getUsers", async (req: Request, res: Response) => {
     console.error(e);  // エラー内容をログに出力
   }
 });
-app.get(`/getUser/:id`, async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const getUser = await prisma.users.findUnique({ where: { id }});
-    return res.json(getUser);
-
-  } catch (e) {
-    console.error(e);  // エラー内容をログに出力
-  }
-});
 app.post("/createUser", async (req: Request, res: Response) => {
   try {
     const { id, name, email } = req.body;
@@ -41,6 +31,26 @@ app.post("/createUser", async (req: Request, res: Response) => {
       },
     });
     return res.json(createItem);  // 成功時のレスポンス
+  } catch (e) {
+    console.error(e);  // エラー内容をログに出力
+  }
+});
+app.put("/editUser/:id", async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const { name, email, tel, address, birth } = req.body;
+
+    const editUser = await prisma.users.update({
+      where: { id },
+      data: {
+        name,
+        email,
+        tel,
+        address,
+        birth
+      },
+    });
+    return res.json(editUser);  // 成功時のレスポンス
   } catch (e) {
     console.error(e);  // エラー内容をログに出力
   }
