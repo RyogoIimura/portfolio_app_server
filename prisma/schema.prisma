@@ -14,19 +14,19 @@ datasource db {
 }
 
 model users {
-  id          String   @id
-  name        String
-  email       String
-  tel         String?
-  post        String?
-  prefecture  String?
-  city        String?
-  address1    String?
-  address2    String?
-  created_at  DateTime @updatedAt
-  updated_at  DateTime @updatedAt
+  id         String   @id
+  name       String
+  email      String
+  tel        String?
+  post       String?
+  prefecture String?
+  city       String?
+  address1   String?
+  address2   String?
+  created_at DateTime @updatedAt
+  updated_at DateTime @updatedAt
 
-  reservations        reservations[]
+  reservations reservations[]
 }
 
 model items {
@@ -38,20 +38,17 @@ model items {
   maximum_temperature String?
   created_at          DateTime @updatedAt
   updated_at          DateTime @updatedAt
-
-  reservations        reservations[]
 }
 
 model reservations {
-  id           String  @id @default(cuid())
-  user_id      String
-  items_id     String
-  start_time   DateTime
-  end_time     DateTime
-  people_cont  Int
-  created_at   DateTime @updatedAt
-  updated_at   DateTime @updatedAt
+  id                String  @id @default(cuid())
+  user_id           String
+  items_list        String
+  start_time        DateTime
+  end_time          DateTime
+  people_cont       Int
+  created_at        DateTime @updatedAt
+  updated_at        DateTime @updatedAt
 
-  users        users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  items        items    @relation(fields: [items_id], references: [id], onDelete: Cascade)
+  users users @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

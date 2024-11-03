@@ -23,14 +23,14 @@ app.get("/getUsers", async (req: Request, res: Response) => {
 app.post("/createUser", async (req: Request, res: Response) => {
   try {
     const { id, name, email } = req.body;
-    const createItem = await prisma.users.create({
+    const createUser = await prisma.users.create({
       data: {
         id,
         name,
         email
       },
     });
-    return res.json(createItem);  // 成功時のレスポンス
+    return res.json(createUser);  // 成功時のレスポンス
   } catch (e) {
     console.error(e);  // エラー内容をログに出力
   }
@@ -136,5 +136,52 @@ app.delete("/deleteItem/:id", async (req: Request, res: Response) => {
 });
 
 // reservations
+app.get("/getReservations", async (req: Request, res: Response) => {
+  try {
+    const getReservations = await prisma.reservations.findMany();
+    const new_data = JSON.stringify(getReservations, (key, value) => {
+      return typeof value === 'bigint' ? value.toString() : value;
+    });
+    return res.json(JSON.parse(new_data));  // 成功時のレスポンス
+  } catch (e) {
+    console.error(e);  // エラー内容をログに出力
+  }
+});
+
+// app.post("/createReserv", async (req: Request, res: Response) => {
+//   try {
+//     const { id, name, email } = req.body;
+//     const createItem = await prisma.users.create({
+//       data: {
+//         id,
+//         name,
+//         email
+//       },
+//     });
+//     return res.json(createItem);  // 成功時のレスポンス
+//   } catch (e) {
+//     console.error(e);  // エラー内容をログに出力
+//   }
+// });
 
 app.listen(PORT, () => console.log("server is running🚀"));
+
+// upsert
+// app.post("/createUser/:id", async (req: Request, res: Response) => {
+//   try {
+//     const { id, name, email } = req.body;
+
+//     const createUser = await prisma.users.upsert({
+//       where: { id },
+//       create: {
+//         id,
+//         name,
+//         email
+//       },
+//       update: {},
+//     });
+//     return res.json(createUser);  // 成功時のレスポンス
+//   } catch (e) {
+//     console.error(e);  // エラー内容をログに出力
+//   }
+// });
