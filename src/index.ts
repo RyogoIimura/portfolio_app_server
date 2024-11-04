@@ -149,7 +149,7 @@ app.get("/getReservations", async (req: Request, res: Response) => {
 });
 app.post("/createReservations", async (req: Request, res: Response) => {
   try {
-    const { user_id, items_list, start_time, end_time, people_cont } = req.body;
+    const { user_id, items_list, people_cont, date, start_time } = req.body;
     const createReservation = await prisma.reservations.create({
       data: {
         users: {
@@ -158,9 +158,9 @@ app.post("/createReservations", async (req: Request, res: Response) => {
           }
         },
         items_list,
-        start_time,
-        end_time,
-        people_cont
+        people_cont,
+        date,
+        start_time
       },
     });
     // BigInt を string に変換してレスポンスを返す
