@@ -87,10 +87,10 @@ app.post("/createItem", async (req: Request, res: Response) => {
       },
     });
     // BigInt を string に変換してレスポンスを返す
-    const createItemStringified = JSON.stringify(createItem, (key, value) => {
+    const new_data = JSON.stringify(createItem, (key, value) => {
       return typeof value === "bigint" ? value.toString() : value;
     });
-    return res.json(createItemStringified);  // 成功時のレスポンス
+    return res.json(new_data);  // 成功時のレスポンス
   } catch (e) {
     console.error(e);  // エラー内容をログに出力
   }
@@ -111,10 +111,10 @@ app.put("/editItem/:id", async (req: Request, res: Response) => {
       },
     });
     // BigInt を string に変換してレスポンスを返す
-    const editedItemStringified = JSON.stringify(editItem, (key, value) => {
+    const new_data = JSON.stringify(editItem, (key, value) => {
       return typeof value === "bigint" ? value.toString() : value;
     });
-    return res.json(editedItemStringified);  // 成功時のレスポンス
+    return res.json(new_data);  // 成功時のレスポンス
   } catch (e) {
     console.error(e);  // エラー内容をログに出力
   }
@@ -126,10 +126,10 @@ app.delete("/deleteItem/:id", async (req: Request, res: Response) => {
       where: { id },
     });
     // BigInt を string に変換してレスポンスを返す
-    const deleteItemStringified = JSON.stringify(deleteItem, (key, value) => {
+    const new_data = JSON.stringify(deleteItem, (key, value) => {
       return typeof value === "bigint" ? value.toString() : value;
     });
-    return res.json(deleteItemStringified);  // 成功時のレスポンス
+    return res.json(new_data);  // 成功時のレスポンス
   } catch (e) {
     console.error(e);  // エラー内容をログに出力
   }
@@ -147,22 +147,31 @@ app.get("/getReservations", async (req: Request, res: Response) => {
     console.error(e);  // エラー内容をログに出力
   }
 });
-
-// app.post("/createReserv", async (req: Request, res: Response) => {
-//   try {
-//     const { id, name, email } = req.body;
-//     const createItem = await prisma.users.create({
-//       data: {
-//         id,
-//         name,
-//         email
-//       },
-//     });
-//     return res.json(createItem);  // 成功時のレスポンス
-//   } catch (e) {
-//     console.error(e);  // エラー内容をログに出力
-//   }
-// });
+app.post("/createReservations", async (req: Request, res: Response) => {
+  try {
+    const { user_id, items_list, start_time, end_time, people_cont } = req.body;
+    const createReservation = await prisma.reservations.create({
+      data: {
+        users: {
+          connect: {
+            id: user_id,
+          }
+        },
+        items_list,
+        start_time,
+        end_time,
+        people_cont
+      },
+    });
+    // BigInt を string に変換してレスポンスを返す
+    const new_data = JSON.stringify(createReservation, (key, value) => {
+      return typeof value === "bigint" ? value.toString() : value;
+    });
+    return res.json(new_data);  // 成功時のレスポンス
+  } catch (e) {
+    console.error(e);  // エラー内容をログに出力
+  }
+});
 
 app.listen(PORT, () => console.log("server is running🚀"));
 
