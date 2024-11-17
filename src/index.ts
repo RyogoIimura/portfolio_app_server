@@ -22,12 +22,13 @@ app.get("/getUsers", async (req: Request, res: Response) => {
 });
 app.post("/createUser", async (req: Request, res: Response) => {
   try {
-    const { id, name, email } = req.body;
+    const { id, name, email, complete } = req.body;
     const createUser = await prisma.users.create({
       data: {
         id,
         name,
-        email
+        email,
+        complete
       },
     });
     return res.json(createUser);  // 成功時のレスポンス
@@ -38,7 +39,7 @@ app.post("/createUser", async (req: Request, res: Response) => {
 app.put("/editUser/:id", async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const { name, email, tel, post, prefecture, city, address1, address2, created_at, updated_at } = req.body;
+    const { name, email, tel, post, prefecture, city, address1, address2, created_at, updated_at, complete } = req.body;
 
     const editUser = await prisma.users.update({
       where: { id },
@@ -53,7 +54,8 @@ app.put("/editUser/:id", async (req: Request, res: Response) => {
         address1,
         address2,
         created_at,
-        updated_at
+        updated_at,
+        complete
       },
     });
     return res.json(editUser);  // 成功時のレスポンス

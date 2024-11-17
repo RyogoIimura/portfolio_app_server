@@ -23,6 +23,7 @@ model users {
   city       String?
   address1   String?
   address2   String?
+  complete   Boolean
   created_at DateTime @updatedAt
   updated_at DateTime @updatedAt
 
